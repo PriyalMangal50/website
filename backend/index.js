@@ -6,12 +6,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-
 const allowedOrigins = [
-  'https://website-nine-eta-78.vercel.app/login', // Local frontend for development
+  'http://localhost:5173', // Local frontend for development
 ];
 
-// For production, add the deployed frontend URL from an environment variable
 if (process.env.FRONTEND_URL) {
   allowedOrigins.push(process.env.FRONTEND_URL);
 }
@@ -20,6 +18,7 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true
 }));
+
 
 app.use(express.json());
 
