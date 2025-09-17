@@ -9,21 +9,21 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",                // Local dev
-  "https://website-front.netlify.app/login" // Vercel frontend
+  "https://website-front.netlify.app"     // Netlify frontend
 ];
 
 // Add FRONTEND_URL from .env if exists
-if (process.env.FRONTEND_URL) {
+if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
   allowedOrigins.push(process.env.FRONTEND_URL);
 }
 
 // CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin) || /\.netlify\.app$/.test(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("Not allowed by CORS: " + origin));
     }
   },
   credentials: true,
@@ -35,20 +35,11 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);
-
-const adminRoutes = require('./routes/admin');
-app.use('/api/admin', adminRoutes);
-
-const uploadRoutes = require('./routes/upload');
-app.use('/api/upload', uploadRoutes);
-
-const userRoutes = require('./routes/user');
-app.use('/api/user', userRoutes);
-
-const blogRoutes = require('./routes/blog');
-app.use('/api/blog', blogRoutes);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/admin', require('./routes/admin'));
+app.use('/api/upload', require('./routes/upload'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/blog', require('./routes/blog'));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -74,12 +65,8 @@ db.once('open', async () => {
 });
 
 // Health check
-app.get('/', (req, res) => {
-  res.send('MERN Blog Backend Running');
-});
+app.get('/', (req, res) => res.send('MERN Blog Backend Running'));
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
