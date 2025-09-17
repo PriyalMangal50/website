@@ -20,11 +20,7 @@ if (process.env.FRONTEND_URL) {
 // CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    if (
-      !origin ||
-      allowedOrigins.includes(origin) ||
-      /\.vercel\.app$/.test(origin) // allow any *.vercel.app
-    ) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -32,7 +28,6 @@ app.use(cors({
   },
   credentials: true,
 }));
-
 
 app.use(express.json());
 
