@@ -9,7 +9,7 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",                // Local dev
-  "https://website-nine-eta-78.vercel.app" // Vercel frontend
+  "https://website-front.netlify.app/login" // Vercel frontend
 ];
 
 // Add FRONTEND_URL from .env if exists
