@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 
 const allowedOrigins = [
-  'http://localhost:5173', // Local frontend for development
+  'https://website-nine-eta-78.vercel.app/login', // Local frontend for development
 ];
 
 // For production, add the deployed frontend URL from an environment variable
