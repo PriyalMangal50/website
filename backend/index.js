@@ -54,8 +54,8 @@ db.once('open', async () => {
   // Auto-create admin user if not exists
   const User = require('./models/User');
   const bcrypt = require('bcryptjs');
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@gmail.com';
-  const adminPassword = process.env.ADMIN_PASSWORD || '12345678';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin1234@gmail.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Priyal1234567890';
   const admin = await User.findOne({ username: adminEmail });
   if (!admin) {
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
